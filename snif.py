@@ -15,7 +15,7 @@ def extract_sip_header(raw_data, header_name):
 def send_to_php(sip_data):
     """ارسال داده‌های SIP به فایل PHP محلی"""
     try:
-        process = subprocess.Popen(["php", "sip_logger.php"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = subprocess.Popen(["/usr/local/php8.4/bin/php", "logger.php"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output, error = process.communicate(input=sip_data.encode())
 
         if error:
