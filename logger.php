@@ -1,16 +1,17 @@
 <?php
-
-
 require __DIR__ . "/vendor/autoload.php";
-
-$text = file_get_contents("php://stdin");
 
 // if (empty($sip_data)) {
 //     echo "There is no data !!";
 //     return;
 // }
+$text = file_get_contents("php://stdin");
+
+echo $text;
+exit;
 
 try {
+
     // تجزیه پیام SIP
     $response = \RTCKit\SIP\Message::parse($text);
 
