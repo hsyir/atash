@@ -1,0 +1,68 @@
+{
+    "packages": [
+        {
+            "name": "rtckit/sip",
+            "version": "0.7.1",
+            "version_normalized": "0.7.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rtckit/php-sip.git",
+                "reference": "7e931877d45c5c64771c09393408ca04c0f5caa6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rtckit/php-sip/zipball/7e931877d45c5c64771c09393408ca04c0f5caa6",
+                "reference": "7e931877d45c5c64771c09393408ca04c0f5caa6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "php": ">=7.4.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^9.5",
+                "symfony/yaml": "^5.3",
+                "vimeo/psalm": "^5.11"
+            },
+            "suggest": {
+                "ext-hash": "Enables RFC 8760 authentication via SHA(-512)-256 hashing"
+            },
+            "time": "2023-05-22T14:24:30+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RTCKit\\SIP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ciprian Dosoftei"
+                }
+            ],
+            "description": "SIP protocol implementation written in PHP",
+            "homepage": "https://github.com/rtckit/php-sip",
+            "keywords": [
+                "rfc 3261",
+                "session initiation protocol",
+                "sip",
+                "telco",
+                "telephony",
+                "voip"
+            ],
+            "support": {
+                "email": "hello@rtckit.io",
+                "issues": "https://github.com/rtckit/php-sip/issues",
+                "source": "https://github.com/rtckit/php-sip/tree/v0.7.1"
+            },
+            "install-path": "../rtckit/sip"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

@@ -1,0 +1,17 @@
+{
+    "name": "hsyir/atashneshani",
+    "autoload": {
+        "psr-4": {
+            "Hsyir\\Atashneshani\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hossein Yaghmaee",
+            "email": "hosseinyaghmaee@gmail.com"
+        }
+    ],
+    "require": {
+        "rtckit/sip": "^0.7.1"
+    }
+}
