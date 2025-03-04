@@ -25,6 +25,16 @@ Content-Type: application/sdp
 Content-Length: 228
 SIPtext;
 
+
+
+$sipPacketEscaped = base64_encode($sip_text);
+// اجرای b.php و ارسال پارامتر
+$res =  exec("php logger.php $sipPacketEscaped");
+
+echo $res;
+
+
+exit;
 // استفاده از shell_exec برای ارسال داده‌ها به فایل `receive_sip.php`
 $command = "php " . __DIR__ . '/logger.php "' . addslashes($sip_text) . '" > /dev/null 2>&1 &';
 $response = shell_exec($command);
