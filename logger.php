@@ -5,10 +5,10 @@ require __DIR__ . "/vendor/autoload.php";
 
 $text = file_get_contents("php://stdin");
 
-if (empty($sip_data)) {
-    echo "There is no data !!";
-    return;
-}
+// if (empty($sip_data)) {
+//     echo "There is no data !!";
+//     return;
+// }
 
 try {
     // تجزیه پیام SIP
