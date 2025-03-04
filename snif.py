@@ -3,7 +3,7 @@ import subprocess
 import re
 
 # مسیر فایل PHP روی سیستم لوکال
-PHP_SCRIPT = "php sip_logger.php"
+PHP_SCRIPT = "/usr/local/php8.4/bin/php logger.php"
 
 def extract_sip_header(raw_data, header_name):
     """Extracts the full value of a given SIP header from raw SIP message."""
