@@ -2,7 +2,7 @@ from scapy.all import *
 
 def packet_callback(pkt):
     if pkt.haslayer(UDP) and pkt.haslayer(Raw):
-        sip_data = pkt[Raw].load.decode(errors='ignore')
+        sip_data = pkt[Raw].load.decode()
 
         # استخراج اولین خط پیام برای تشخیص متد
         first_line = sip_data.split("\n")[0]
