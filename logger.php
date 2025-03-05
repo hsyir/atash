@@ -23,20 +23,20 @@ try {
     /* Outputs "RTCKit\SIP\Request" */
     echo get_class($message) . PHP_EOL;
 
-    printf("Protocol version:   %s" . PHP_EOL, $message->version);
-    printf("Request method:     %s" . PHP_EOL, $message->method);
-    printf("Request URI:        %s" . PHP_EOL, $message->uri);
-    printf("Via:                %s" . PHP_EOL, $message->via->values[0]->host);
-    printf("Via branch:         %s" . PHP_EOL, $message->via->values[0]->branch);
-    printf("From scheme:        %s" . PHP_EOL, $request->from->uri->scheme);
-    printf("From user:          %s" . PHP_EOL, $request->from->uri->user);
-    printf("From host:          %s" . PHP_EOL, $request->from->uri->host);
-    printf("From tag:           %s" . PHP_EOL, $request->from->tag);
-    printf("To scheme:          %s" . PHP_EOL, $request->to->uri->scheme);
-    printf("To user:            %s" . PHP_EOL, $request->to->uri->user);
-    printf("To host:            %s" . PHP_EOL, $request->to->uri->host);
-    printf("Sequence number:    %s" . PHP_EOL, $message->cSeq->sequence);
-    printf("Call ID:            %s" . PHP_EOL, $message->callId->value);
+    print_r("Protocol version:   " . $message->version . PHP_EOL);
+    print_r("Request method:     " . $message->method . PHP_EOL);
+    print_r("Request URI:        " . $message->uri . PHP_EOL);
+    print_r("Via:                " . $message->via->values[0]->host . PHP_EOL);
+    print_r("Via branch:         " . $message->via->values[0]->branch . PHP_EOL);
+    print_r("From scheme:        " . $request->from->uri->scheme . PHP_EOL);
+    print_r("From user:          " . $request->from->uri->user . PHP_EOL);
+    print_r("From host:          " . $request->from->uri->host . PHP_EOL);
+    print_r("From tag:           " . $request->from->tag . PHP_EOL);
+    print_r("To scheme:          " . $request->to->uri->scheme . PHP_EOL);
+    print_r("To user:            " . $request->to->uri->user . PHP_EOL);
+    print_r("To host:            " . $request->to->uri->host . PHP_EOL);
+    print_r("Sequence number:    " . $message->cSeq->sequence . PHP_EOL);
+    print_r("Call ID:            " . $message->callId->value . PHP_EOL);
     if ($message->method != "INVITE") {
         return;
     }
