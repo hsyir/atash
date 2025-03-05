@@ -20,8 +20,8 @@ try {
 
     // تجزیه پیام SIP
     $response = \RTCKit\SIP\Message::parse($text);
-    echo "method: ";
-    echo $response->method;
+    echo "cSeq: ";
+    echo $response->cSeq->sequence;
 
     if($response->method != "INVITE"){
         return;
