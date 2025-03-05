@@ -21,24 +21,11 @@ try {
     // تجزیه پیام SIP
     $message = \RTCKit\SIP\Message::parse($text);
     /* Outputs "RTCKit\SIP\Request" */
-    var_dump($message);
     
-    echo get_class($message) . PHP_EOL;
 
-    print_r("Protocol version:   " . $message->version . PHP_EOL);
-    print_r("Request method:     " . $message->method . PHP_EOL);
-    // print_r("Request URI:        " . $message->uri . PHP_EOL);
-    print_r("Via:                " . $message->via->values[0]->host . PHP_EOL);
-    print_r("Via branch:         " . $message->via->values[0]->branch . PHP_EOL);
-    print_r("From scheme:        " . $request->from->uri->scheme . PHP_EOL);
-    print_r("From user:          " . $request->from->uri->user . PHP_EOL);
-    print_r("From host:          " . $request->from->uri->host . PHP_EOL);
-    print_r("From tag:           " . $request->from->tag . PHP_EOL);
-    print_r("To scheme:          " . $request->to->uri->scheme . PHP_EOL);
-    print_r("To user:            " . $request->to->uri->user . PHP_EOL);
-    print_r("To host:            " . $request->to->uri->host . PHP_EOL);
-    print_r("Sequence number:    " . $message->cSeq->sequence . PHP_EOL);
-    print_r("Call ID:            " . $message->callId->value . PHP_EOL);
+    var_dump($message->extraHeaders["remote-party-id"]);
+
+
     if ($message->method != "INVITE") {
         return;
     }
