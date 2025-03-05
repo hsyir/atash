@@ -35,8 +35,8 @@ def packet_callback(pkt):
 
                 # نمایش کل محتوای SIP برای Debug
                 print("------ SIP Packet Received ------")
-                print(raw_data)
-                print("---------------------------------")
+                #print(raw_data)
+                #print("---------------------------------")
 
                 # ارسال کل محتوای SIP به PHP
                 send_to_php(raw_data)
