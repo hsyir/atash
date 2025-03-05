@@ -22,20 +22,20 @@ try {
     $response = \RTCKit\SIP\Message::parse($text);
 
 
-    print_r("Protocol version:   %s" . PHP_EOL, $response->version);
-    print_r("Request method:     %s" . PHP_EOL, $response->method);
-    print_r("Request URI:        %s" . PHP_EOL, $response->uri);
-    print_r("Via:                %s" . PHP_EOL, $response->via->values[0]->host);
-    print_r("Via branch:         %s" . PHP_EOL, $response->via->values[0]->branch);
-    print_r("From scheme:        %s" . PHP_EOL, $response->from->uri->scheme);
-    print_r("From user:          %s" . PHP_EOL, $response->from->uri->user);
-    print_r("From host:          %s" . PHP_EOL, $response->from->uri->host);
-    print_r("From tag:           %s" . PHP_EOL, $response->from->tag);
-    print_r("To scheme:          %s" . PHP_EOL, $response->to->uri->scheme);
-    print_r("To user:            %s" . PHP_EOL, $response->to->uri->user);
-    print_r("To host:            %s" . PHP_EOL, $response->to->uri->host);
-    print_r("Sequence number:    %s" . PHP_EOL, $response->cSeq->sequence);
-    print_r("Call ID:            %s" . PHP_EOL, $response->callId->value);
+    print_r("Protocol version:   " . $response->version . PHP_EOL);
+    print_r("Request method:     " . $response->method . PHP_EOL);
+    print_r("Request URI:        " . $response->uri . PHP_EOL);
+    print_r("Via:                " . $response->via->values[0]->host . PHP_EOL);
+    print_r("Via branch:         " . $response->via->values[0]->branch . PHP_EOL);
+    print_r("From scheme:        " . $response->from->uri->scheme . PHP_EOL);
+    print_r("From user:          " . $response->from->uri->user . PHP_EOL);
+    print_r("From host:          " . $response->from->uri->host . PHP_EOL);
+    print_r("From tag:           " . $response->from->tag . PHP_EOL);
+    print_r("To scheme:          " . $response->to->uri->scheme . PHP_EOL);
+    print_r("To user:            " . $response->to->uri->user . PHP_EOL);
+    print_r("To host:            " . $response->to->uri->host . PHP_EOL);
+    print_r("Sequence number:    " . $response->cSeq->sequence . PHP_EOL);
+    print_r("Call ID:            " . $response->callId->value . PHP_EOL);
     echo "\r\n---------\r\n";
 
     if ($response->method != "INVITE") {
