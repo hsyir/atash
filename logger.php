@@ -24,7 +24,7 @@ try {
 
     print_r("Protocol version:   " . $response->version . PHP_EOL);
     print_r("Request method:     " . $response->method . PHP_EOL);
-    print_r("Request URI:        " . $response->uri . PHP_EOL);
+    // print_r("Request URI:        " . $response->uri . PHP_EOL);
     print_r("Via:                " . $response->via->values[0]->host . PHP_EOL);
     print_r("Via branch:         " . $response->via->values[0]->branch . PHP_EOL);
     print_r("From scheme:        " . $response->from->uri->scheme . PHP_EOL);
