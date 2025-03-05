@@ -27,7 +27,7 @@ def send_to_php(sip_data):
 
 def packet_callback(pkt):
     """Packet sniffing callback function."""
-    
+    print("callback-------")
     if pkt.haslayer(UDP):
         if pkt[UDP].dport == 5060 or pkt[UDP].sport == 5060:
             if pkt.haslayer(Raw):
