@@ -20,7 +20,8 @@ try {
 
     // تجزیه پیام SIP
     $response = \RTCKit\SIP\Message::parse($text);
-
+    echo get_class($response) . PHP_EOL;
+    exit;
 
     print_r("Protocol version:   " . $response->version . PHP_EOL);
     print_r("Request method:     " . $response->method . PHP_EOL);
