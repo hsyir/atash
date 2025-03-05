@@ -15,4 +15,4 @@ def packet_callback(pkt):
         else:
             print("📦 دریافت پیام دیگر:", first_line)
 
-sniff(prn=packet_callback, filter="udp port 5060", store=0)
+sniff(prn=packet_callback, filter="udp port 5060 or tcp port 5060", store=0)
