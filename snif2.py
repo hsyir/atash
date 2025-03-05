@@ -1,4 +1,4 @@
-from scapy.all import sniff, UDP
+from scapy.all import sniff, UDP, TCP
 
 def packet_callback(pkt):
     if pkt.haslayer(UDP) or pkt.haslayer(TCP):
