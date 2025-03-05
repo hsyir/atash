@@ -23,7 +23,7 @@ try {
     /* Outputs "RTCKit\SIP\Request" */
     
 
-    var_dump($message->extraHeaders["remote-party-id"]);
+    var_dump($message->extraHeaders);
 
 
     if ($message->method != "INVITE") {
