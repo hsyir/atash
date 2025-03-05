@@ -28,24 +28,25 @@ def send_to_php(sip_data):
 def packet_callback(pkt):
     """Packet sniffing callback function."""
     print("---------callback--------")
-    if pkt.haslayer(Raw):
-        raw_data = pkt[Raw].load.decode(errors='ignore')
+    if pkt.haslayer(UDP):
+        if pkt[UDP].dport == 5060 or pkt[UDP].sport == 5060:
+            raw_data = pkt[Raw].load.decode(errors='ignore')
 
-        # نمایش کل محتوای SIP برای Debug
-        print("------ SIP Packet Received ------")
-        print(raw_data)
-        #print("---------------------------------")
-        #print("")
-        print("")
-        #print("")
+            # نمایش کل محتوای SIP برای Debug
+            print("------ SIP Packet Received ------")
+            #print(raw_data)
+            #print("---------------------------------")
+            #print("")
+            print("")
+            #print("")
 
-        # ارسال کل محتوای SIP به PHP
-        #send_to_php(raw_data)
+            # ارسال کل محتوای SIP به PHP
+            #send_to_php(raw_data)
 
 def start_sniffing():
     """Start sniffing packets on port 5060."""
     print("Starting to sniff packets on port 5060...")
-    sniff(prn=packet_callback, filter="", store=0)
+    sniff(prn=packet_callback, filter="udp port 5060", store=0)
 
 if __name__ == "__main__":
     start_sniffing()
