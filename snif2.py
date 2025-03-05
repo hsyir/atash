@@ -1,18 +1,12 @@
-from scapy.all import *
+from scapy.all import sniff, UDP
 
 def packet_callback(pkt):
-    if pkt.haslayer(UDP) and pkt.haslayer(Raw):
-        sip_data = pkt[Raw].load.decode()
-
-        # استخراج اولین خط پیام برای تشخیص متد
-        first_line = sip_data.split("\n")[0]
-
-        if first_line.startswith("INVITE"):
-            print("🔥 دریافت پیام SIP INVITE!")
-            print(sip_data)
-        elif first_line.startswith("OPTIONS"):
-            print("📡 دریافت پیام SIP OPTIONS!")
+    if pkt.haslayer(UDP):
+        print(f"Packet: {pkt.show()}")  # نمایش تمام لایه‌های پکت
+        if pkt.haslayer(Raw):
+            print("Raw Layer Data:")
+            print(pkt[Raw].load.decode(errors='ignore'))
         else:
-            print("📦 دریافت پیام دیگر:", first_line)
+            print("No Raw Data in packet")
 
-sniff(prn=packet_callback, filter="udp port 5060 or tcp port 5060", store=0)
+sniff(prn=packet_callback, filter="udp port 5060", store=0)
