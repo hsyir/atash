@@ -23,7 +23,7 @@ try {
     /* Outputs "RTCKit\SIP\Request" */
     
 
-    echo json_encode($message->extraHeaders, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    echo json_encode($message, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
 
     if ($message->method != "INVITE") {
