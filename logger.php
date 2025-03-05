@@ -20,7 +20,12 @@ try {
 
     // تجزیه پیام SIP
     $response = \RTCKit\SIP\Message::parse($text);
-    echo $response->extraHeaders["remote-party-id"]->values[0];
+    
+    if($response->method != "INVITE"){
+        return;
+    }
+    
+    //echo $response->extraHeaders["remote-party-id"]->values[0];
 
     // تبدیل به JSON
     $jsonData = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
