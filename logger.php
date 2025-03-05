@@ -21,6 +21,8 @@ try {
     // تجزیه پیام SIP
     $message = \RTCKit\SIP\Message::parse($text);
     /* Outputs "RTCKit\SIP\Request" */
+    var_dump($message);
+    
     echo get_class($message) . PHP_EOL;
 
     print_r("Protocol version:   " . $message->version . PHP_EOL);
