@@ -7,8 +7,8 @@ def packet_callback(pkt):
         print(f"Packet Summary: {pkt.summary()}")
 
         # بررسی و نمایش تمام لایه‌های پکت
-        print("Full Packet Information:")
-        pkt.show()
+        # print("Full Packet Information:")
+        # pkt.show()
 
         # بررسی لایه Raw (برای داده‌های متن خام)
         if pkt.haslayer(Raw):
