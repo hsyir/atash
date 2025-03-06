@@ -2,14 +2,17 @@ import re
 import subprocess
 import threading
 import requests
+from datetime import datetime
 
-def send_to_api(cid, did, ext, party):
+def send_to_api(cid, did, ext, party, call_id, call_time):
     url = "https://01jbacggp03tqvbhnvr0hbz40500-ed8958821260c9899ca1.requestinspector.com"  # آدرس API خود را وارد کنید
     data = {
         "cid": cid,
         "did": did,
         "ext": ext,
-        "party": party
+        "party": party,
+        "call_id": call_id,
+        "call_time": call_time
     }
     try:
         response = requests.post(url, json=data)
@@ -25,7 +28,8 @@ def capture_sip_logs():
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
     
     flag = False
-    cid, did, ext, party = None, None, None, None
+    cid, did, ext, party, call_id = None, None, None, None, None
+    call_time = None
     
     for line in process.stdout:
         line = line.strip()
@@ -33,6 +37,13 @@ def capture_sip_logs():
         if "SIP/2.0 200 OK" in line:
             flag = True
             continue
+        
+        if flag and "Call-ID:" in line:
+            match = re.search(r"Call-ID: (\S+)", line)
+            if match:
+                call_id = match.group(1).strip()
+                call_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")  # زمان تماس
+                continue
         
         if flag and "From:" in line:
             match = re.search(r'From: "?([^"]*)"? <sip:([^@]+)@', line)
@@ -55,7 +66,7 @@ def capture_sip_logs():
                 result = f"as CID = {cid} and DID = {did} and EXT = {ext} is {party}"
                 print(result)  # نمایش در Bash
                 # ایجاد یک thread جدید برای ارسال داده‌ها به API
-                threading.Thread(target=send_to_api, args=(cid, did, ext, party)).start()
+                threading.Thread(target=send_to_api, args=(cid, did, ext, party, call_id, call_time)).start()
                 flag = False
 
 if __name__ == "__main__":
