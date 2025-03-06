@@ -4,7 +4,7 @@ import threading
 import requests
 
 def send_to_api(cid, did, ext, party):
-    url = "http://your-api-endpoint.com"  # آدرس API خود را وارد کنید
+    url = "https://01jbacggp03tqvbhnvr0hbz40500-ed8958821260c9899ca1.requestinspector.com"  # آدرس API خود را وارد کنید
     data = {
         "cid": cid,
         "did": did,
