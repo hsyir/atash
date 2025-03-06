@@ -7,13 +7,26 @@ from datetime import datetime
 def send_to_api(cid, did, ext, party, call_id, call_time):
     url = "https://01jbacggp03tqvbhnvr0hbz40500-ed8958821260c9899ca1.requestinspector.com"  # آدرس API خود را وارد کنید
     data = {
-        "cid": cid,
-        "did": did,
-        "ext": ext,
-        "party": party,
-        "call_id": call_id,
-        "call_time": call_time
+        "call_tel": cid,
+        "cc_did": did,
+        "cc_ext": ext,
+        "cc_party": party,
+        "cc_callid": call_id,
+        "call_date": call_time
     }
+
+
+#     curl --location 'http://172.20.118.173/insertfar.php' \
+# --header 'Content-Type: application/json' \
+# --data '{  
+#     "call_date": "2025-03-06 10:00:00",  
+#     "call_tel": "1234567890",  
+#     "cc_did": 123,  
+#     "cc_ext": "456",  
+#     "cc_party": "Caller Name",  
+#     "cc_callid": "uniqueCallId"  
+# }'
+
     try:
         response = requests.post(url, json=data)
         if response.status_code == 200:
