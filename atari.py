@@ -5,7 +5,7 @@ import requests
 from datetime import datetime
 
 def send_to_api(cid, did, ext, party, call_id, call_time):
-    url = "http://172.20.118.173/insertfar.php"  # آدرس API خود را وارد کنید
+    url = "http://172.20.118.173/insertfar.php"
     data = {
         "call_tel": cid,
         "cc_did": did,
@@ -15,26 +15,19 @@ def send_to_api(cid, did, ext, party, call_id, call_time):
         "call_date": call_time
     }
 
-
-#     curl --location 'http://172.20.118.173/insertfar.php' \
-# --header 'Content-Type: application/json' \
-# --data '{  
-#     "call_date": "2025-03-06 10:00:00",  
-#     "call_tel": "1234567890",  
-#     "cc_did": 123,  
-#     "cc_ext": "456",  
-#     "cc_party": "Caller Name",  
-#     "cc_callid": "uniqueCallId"  
-# }'
+    headers = {'Content-Type': 'application/json'}
 
     try:
-        response = requests.post(url, json=data)
-        if response.status_code == 200:
+        response = requests.post(url, json=data, headers=headers)
+        print(f"Response Code: {response.status_code}")
+        print(f"Response Text: {response.text}")  # بررسی محتوای پاسخ
+        if response.status_code in [200, 201]:
             print(f"Data sent successfully: {data}")
         else:
-            print(f"Failed to send data: {response.status_code}")
+            print(f"Failed to send data: {response.status_code}, Response: {response.text}")
     except Exception as e:
         print(f"Error sending data: {e}")
+
 
 def capture_sip_logs():
     cmd = ["sudo", "tcpdump", "-i", "any", "-A", "-n", "port", "5060"]
