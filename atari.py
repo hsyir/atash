@@ -1,5 +1,24 @@
 import re
 import subprocess
+import threading
+import requests
+
+def send_to_api(cid, did, ext, party):
+    url = "http://your-api-endpoint.com"  # آدرس API خود را وارد کنید
+    data = {
+        "cid": cid,
+        "did": did,
+        "ext": ext,
+        "party": party
+    }
+    try:
+        response = requests.post(url, json=data)
+        if response.status_code == 200:
+            print(f"Data sent successfully: {data}")
+        else:
+            print(f"Failed to send data: {response.status_code}")
+    except Exception as e:
+        print(f"Error sending data: {e}")
 
 def capture_sip_logs():
     cmd = ["sudo", "tcpdump", "-i", "any", "-A", "-n", "port", "5060"]
@@ -35,7 +54,9 @@ def capture_sip_logs():
                 party = party.strip()
                 result = f"as CID = {cid} and DID = {did} and EXT = {ext} is {party}"
                 print(result)  # نمایش در Bash
+                # ایجاد یک thread جدید برای ارسال داده‌ها به API
+                threading.Thread(target=send_to_api, args=(cid, did, ext, party)).start()
                 flag = False
 
-if name == "main":
+if __name__ == "__main__":
     capture_sip_logs()
