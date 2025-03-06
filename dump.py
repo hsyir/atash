@@ -63,7 +63,7 @@ def run_tcpdump():
             if call_info and "From" in call_info and call_info["From"]:
                 print("📞 Incoming Call Detected:")
                 print(f"From: {call_info['From']}\nTo: {call_info['To']}\nRemote-Party-ID: {call_info['Remote-Party-ID']}\n")
-                send_to_php(call_info)
+                # send_to_php(call_info)
 
 if __name__ == "__main__":
     print("🚀 Listening for incoming SIP calls on port 5060...")
