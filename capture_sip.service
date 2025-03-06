@@ -1,0 +1,12 @@
+[Unit]
+Description=Capture SIP Logs and Send to API
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /usr/local/bin/capture_sip.py
+Restart=always
+User=root
+WorkingDirectory=/usr/local/bin/
+
+[Install]
+WantedBy=multi-user.target
