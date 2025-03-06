@@ -50,7 +50,7 @@ def run_tcpdump():
             flag = False
             if sip_data:
                 print("📡 Extracted SIP Data:\n", sip_data)
-                send_to_php(sip_data)
+                # send_to_php(sip_data)
 
 if __name__ == "__main__":
     print("🚀 Starting TCPDump Packet Sniffing on port 5060...")
