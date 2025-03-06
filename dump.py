@@ -52,20 +52,20 @@ def run_tcpdump():
             if line.strip() == "":
                 sip_headers = extract_sip_headers(raw_data)
 
-                # بررسی اینکه تماس ورودی است و Remote-Party-ID دارد
-                if "From" in sip_headers and "Remote-Party-ID" in sip_headers:
+                # بررسی اینکه هر سه مقدار `From`، `To` و `Remote-Party-ID` مقدار دارند
+                if all(key in sip_headers and sip_headers[key] != "None" for key in ["From", "To", "Remote-Party-ID"]):
                     log_message = f"""
 📞 Incoming Call Detected:
 Method: {sip_headers.get("Method", "Unknown")}
 CSeq: {sip_headers.get("CSeq", "Unknown")}
-From: {sip_headers.get("From", "Unknown")}
-To: {sip_headers.get("To", "Unknown")}
-Remote-Party-ID: {sip_headers.get("Remote-Party-ID", "None")}
+From: {sip_headers["From"]}
+To: {sip_headers["To"]}
+Remote-Party-ID: {sip_headers["Remote-Party-ID"]}
 
 📝 Full SIP Packet:
 {sip_headers["Raw SIP Packet"]}
 """
-                    print(log_message)
+                    # print(log_message)
                     # send_to_php(log_message)
 
                 raw_data = ""  # پاک کردن داده‌های قبلی برای پردازش پیام جدید
