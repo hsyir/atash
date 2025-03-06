@@ -6,7 +6,7 @@ PHP_SCRIPT = "/usr/local/php8.4/bin/php logger.php"
 
 def extract_sip_headers(raw_data):
     """استخراج اطلاعات کلیدی از پیام‌های SIP"""
-    headers = {}
+    headers = {"Raw SIP Packet": raw_data.strip()}  # ذخیره کل پکت SIP
 
     # استخراج متد و شماره توالی
     method_match = re.search(r'^(INVITE|BYE|ACK|CANCEL|REGISTER|OPTIONS|INFO|PRACK|SUBSCRIBE|NOTIFY|PUBLISH|MESSAGE|UPDATE|REFER) SIP/2.0', raw_data, re.MULTILINE)
@@ -61,9 +61,12 @@ CSeq: {sip_headers.get("CSeq", "Unknown")}
 From: {sip_headers.get("From", "Unknown")}
 To: {sip_headers.get("To", "Unknown")}
 Remote-Party-ID: {sip_headers.get("Remote-Party-ID", "None")}
+
+📝 Full SIP Packet:
+{sip_headers["Raw SIP Packet"]}
 """
                     print(log_message)
-                    send_to_php(log_message)
+                    # send_to_php(log_message)
 
                 raw_data = ""  # پاک کردن داده‌های قبلی برای پردازش پیام جدید
 
