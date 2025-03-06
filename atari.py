@@ -5,7 +5,7 @@ import requests
 from datetime import datetime
 
 def send_to_api(cid, did, ext, party, call_id, call_time):
-    url = "https://01jbacggp03tqvbhnvr0hbz40500-ed8958821260c9899ca1.requestinspector.com"  # آدرس API خود را وارد کنید
+    url = "http://172.20.118.173/insertfar.php"  # آدرس API خود را وارد کنید
     data = {
         "call_tel": cid,
         "cc_did": did,
