@@ -1,34 +1,32 @@
 import subprocess
 import re
 
-# مسیر فایل PHP برای لاگ کردن تماس‌ها
+# مسیر فایل PHP برای ارسال داده‌ها
 PHP_SCRIPT = "/usr/local/php8.4/bin/php logger.php"
 
-# لیست هدرهایی که می‌خواهیم استخراج کنیم
-HEADERS = [
-    "From", "To", "Remote-Party-ID", "Call-ID", "CSeq",
-    "User-Agent", "Contact", "Via", "Allow", "Supported"
-]
+def extract_sip_headers(raw_data):
+    """استخراج اطلاعات کلیدی از پیام‌های SIP"""
+    headers = {}
 
-def extract_sip_info(sip_data):
-    """استخراج اطلاعات کلیدی از پیام SIP"""
-    extracted_info = {}
+    # استخراج متد و شماره توالی
+    method_match = re.search(r'^(INVITE|BYE|ACK|CANCEL|REGISTER|OPTIONS|INFO|PRACK|SUBSCRIBE|NOTIFY|PUBLISH|MESSAGE|UPDATE|REFER) SIP/2.0', raw_data, re.MULTILINE)
+    seq_match = re.search(r'CSeq:\s*(\d+)\s*(\w+)', raw_data, re.IGNORECASE)
 
-    for header in HEADERS:
-        match = re.findall(rf"{header}:\s*(.*)", sip_data, re.IGNORECASE)
-        if match:
-            extracted_info[header] = "\n".join(match)  # اگر چند مقدار وجود داشت، همه را ذخیره کن
-
-    # متد SIP (اولین کلمه قبل از "SIP/2.0")
-    method_match = re.match(r"(\w+)\s+SIP/2.0", sip_data)
     if method_match:
-        extracted_info["Method"] = method_match.group(1)
+        headers["Method"] = method_match.group(1)
+    if seq_match:
+        headers["CSeq"] = f"{seq_match.group(1)} {seq_match.group(2)}"
 
-    return extracted_info if extracted_info.get("Remote-Party-ID") else None  # فقط تماس‌هایی که Remote-Party-ID دارند
+    # استخراج هدرهای اصلی
+    for header in ["From", "To", "Remote-Party-ID"]:
+        match = re.search(rf"{header}:\s*(.*)", raw_data, re.IGNORECASE)
+        if match:
+            headers[header] = match.group(1).strip()
 
-def send_to_php(call_info):
-    """ارسال اطلاعات تماس به اسکریپت PHP"""
-    sip_data = "\n".join([f"{key}: {value}" for key, value in call_info.items()])
+    return headers
+
+def send_to_php(sip_data):
+    """ارسال داده‌های SIP به اسکریپت PHP"""
     try:
         process = subprocess.Popen([PHP_SCRIPT], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output, error = process.communicate(input=sip_data.encode())
@@ -41,36 +39,33 @@ def send_to_php(call_info):
         print(f"❌ Error executing PHP script: {e}")
 
 def run_tcpdump():
-    """اجرای tcpdump برای شنود تماس‌های ورودی روی پورت 5060"""
+    """اجرای tcpdump برای شنود تماس‌های SIP"""
+    print("🚀 Listening for SIP packets on port 5060...")
     cmd = ["sudo", "tcpdump", "-i", "any", "-A", "-n", "port", "5060"]
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    
+    with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, bufsize=1) as proc:
+        raw_data = ""
+        for line in proc.stdout:
+            raw_data += line
 
-    flag = False
-    sip_data = ""
+            # تشخیص پایان یک پیام SIP
+            if line.strip() == "":
+                sip_headers = extract_sip_headers(raw_data)
 
-    for line in process.stdout:
-        line = line.strip()
+                # بررسی اینکه تماس ورودی است و Remote-Party-ID دارد
+                if "From" in sip_headers and "Remote-Party-ID" in sip_headers:
+                    log_message = f"""
+📞 Incoming Call Detected:
+Method: {sip_headers.get("Method", "Unknown")}
+CSeq: {sip_headers.get("CSeq", "Unknown")}
+From: {sip_headers.get("From", "Unknown")}
+To: {sip_headers.get("To", "Unknown")}
+Remote-Party-ID: {sip_headers.get("Remote-Party-ID", "None")}
+"""
+                    print(log_message)
+                    send_to_php(log_message)
 
-        # بررسی آغاز یک پیام جدید (خطی که متد SIP را مشخص می‌کند)
-        if re.match(r"\w+\s+SIP/2.0", line):
-            flag = True
-            sip_data = line + "\n"
-        elif flag:
-            sip_data += line + "\n"
-
-        # پایان پردازش پیام (خط خالی)
-        if flag and line == "":
-            flag = False
-            call_info = extract_sip_info(sip_data)
-
-            if call_info:
-                print("📞 Incoming Call Detected:")
-                for key, value in call_info.items():
-                    print(f"{key}: {value}")
-                print("-" * 40)
-                
-                send_to_php(call_info)
+                raw_data = ""  # پاک کردن داده‌های قبلی برای پردازش پیام جدید
 
 if __name__ == "__main__":
-    print("🚀 Listening for incoming SIP calls on port 5060...")
     run_tcpdump()
