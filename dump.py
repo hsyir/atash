@@ -4,25 +4,31 @@ import re
 # مسیر فایل PHP برای لاگ کردن تماس‌ها
 PHP_SCRIPT = "/usr/local/php8.4/bin/php logger.php"
 
+# لیست هدرهایی که می‌خواهیم استخراج کنیم
+HEADERS = [
+    "From", "To", "Remote-Party-ID", "Call-ID", "CSeq",
+    "User-Agent", "Contact", "Via", "Allow", "Supported"
+]
+
 def extract_sip_info(sip_data):
-    """استخراج اطلاعات مهم تماس (From, To, Remote-Party-ID)"""
-    headers = {
-        "From": None,
-        "To": None,
-        "Remote-Party-ID": None
-    }
+    """استخراج اطلاعات کلیدی از پیام SIP"""
+    extracted_info = {}
 
-    for line in sip_data.split("\n"):
-        for key in headers.keys():
-            match = re.search(rf"{key}:\s*(.*)", line, re.IGNORECASE)
-            if match:
-                headers[key] = match.group(1).strip()
+    for header in HEADERS:
+        match = re.findall(rf"{header}:\s*(.*)", sip_data, re.IGNORECASE)
+        if match:
+            extracted_info[header] = "\n".join(match)  # اگر چند مقدار وجود داشت، همه را ذخیره کن
 
-    return headers if headers["From"] else None  # اطمینان از داشتن اطلاعات تماس
+    # متد SIP (اولین کلمه قبل از "SIP/2.0")
+    method_match = re.match(r"(\w+)\s+SIP/2.0", sip_data)
+    if method_match:
+        extracted_info["Method"] = method_match.group(1)
+
+    return extracted_info if extracted_info.get("Remote-Party-ID") else None  # فقط تماس‌هایی که Remote-Party-ID دارند
 
 def send_to_php(call_info):
     """ارسال اطلاعات تماس به اسکریپت PHP"""
-    sip_data = f"From: {call_info['From']}\nTo: {call_info['To']}\nRemote-Party-ID: {call_info['Remote-Party-ID']}\n"
+    sip_data = "\n".join([f"{key}: {value}" for key, value in call_info.items()])
     try:
         process = subprocess.Popen([PHP_SCRIPT], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output, error = process.communicate(input=sip_data.encode())
@@ -45,25 +51,25 @@ def run_tcpdump():
     for line in process.stdout:
         line = line.strip()
 
-        # بررسی آغاز یک تماس جدید (200 OK نشان‌دهنده پاسخ موفق به تماس است)
-        if "SIP/2.0 200 OK" in line:
+        # بررسی آغاز یک پیام جدید (خطی که متد SIP را مشخص می‌کند)
+        if re.match(r"\w+\s+SIP/2.0", line):
             flag = True
-            sip_data = ""
-
-        # ذخیره اطلاعات در صورت فعال بودن flag
-        if flag:
+            sip_data = line + "\n"
+        elif flag:
             sip_data += line + "\n"
 
-        # پایان پردازش پیام (وقتی یک خط خالی بیاید)
+        # پایان پردازش پیام (خط خالی)
         if flag and line == "":
             flag = False
             call_info = extract_sip_info(sip_data)
 
-            # فیلتر کردن فقط تماس‌های ورودی (اگر "From" وجود داشته باشد و "To" شماره داخلی باشد)
-            if call_info and "From" in call_info and call_info["From"]:
+            if call_info:
                 print("📞 Incoming Call Detected:")
-                print(f"From: {call_info['From']}\nTo: {call_info['To']}\nRemote-Party-ID: {call_info['Remote-Party-ID']}\n")
-                # send_to_php(call_info)
+                for key, value in call_info.items():
+                    print(f"{key}: {value}")
+                print("-" * 40)
+                
+                send_to_php(call_info)
 
 if __name__ == "__main__":
     print("🚀 Listening for incoming SIP calls on port 5060...")
